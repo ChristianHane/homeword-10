@@ -71,7 +71,12 @@ function promptPurchase() {
         item_ID: answers.id
       }
     ]).then(response => {
-      checkQuantity(response.response[0].stock_quantity, answers.quantity, response.response[0].price, answers.id, response.response[0].product_sales);
+      if (response.response.length !== 0) {
+        checkQuantity(response.response[0].stock_quantity, answers.quantity, response.response[0].price, answers.id, response.response[0].product_sales);
+      } else {
+        console.log("Sorry we couldn't find any product under that id");
+        anotherTransactionPrompt();
+      }
     }).catch(err => console.log(err));
   }).catch(err => console.log(err));
 }

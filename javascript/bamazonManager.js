@@ -56,15 +56,19 @@ function viewProducts() {
 function lowInventory() {
   connection.query('SELECT * FROM products WHERE stock_quantity < 5')
   .then((response) => {
+    let head = [];
+    response.fields.forEach(element => {
+      head.push(element.name);
+    })
     let table = new Table({
-      head: [response.fields[0].name, response.fields[1].name, response.fields[2].name, response.fields[3].name, response.fields[4].name, response.fields[5].product_sales],
+      head: head,
       style: { 'padding-left': 0, 'padding-right': 0 }
     })
-    for (let i = 0; i < response.length; i++) {
-      table.push([response.response[i].item_ID, response.response[i].product_name, response.response[i].department_name, response.response[i].price, response.response[i].stock_quantity, response.reponse[i].product_sales]);
+    for (let i = 0; i < response.response.length; i++) {
+      table.push([response.response[i].item_ID, response.response[i].product_name, response.response[i].department_name, response.response[i].price, response.response[i].stock_quantity, response.response[i].product_sales]);
     }
     console.log(table.toString());
-    if(response.length === 0) {
+    if(response.response.length === 0) {
       console.log('\nThere is no low inventory.\n');
     }
     prompt();
